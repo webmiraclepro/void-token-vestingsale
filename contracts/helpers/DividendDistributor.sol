@@ -19,7 +19,7 @@ contract DividendDistributor  {
 
     // WFTM;
     // address WFTM = 0x21be370D5312f44cB42ce377BC9b8a0cEF1A4C83;
-    address WFTM = 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2;
+    address WFTM = 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2;//mainnet WETH
 
     // Spookyswap Router; 
     IUniswapV2Router02 router;

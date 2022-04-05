@@ -23,7 +23,7 @@ describe("VoidTest", function() {
     let latestBlock:any;
     let tokenVoid: Void;
     const router = "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D";
-    const routerSpooky = "0xF491e7B69E4244ad4002BC14e878a34207E38c29";
+    const routerSpooky = "0xF491e7B69E4244ad4002BC14e878a34207E38c29";//fantom testnet
     const EP = "0x82f0B8B456c1A451378467398982d4834b6829c1";
     // const WETH = "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2";
     const deadline: BigNumber = ethers.BigNumber.from('2').pow('256').sub('2');

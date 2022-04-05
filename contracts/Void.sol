@@ -13,7 +13,7 @@ import "./Middleware.sol";
 
 import "hardhat/console.sol";
 
-contract Void is Auth, Middleware {
+contract Void is Auth {
 
   using SafeMath for uint256;
 
@@ -38,7 +38,7 @@ contract Void is Auth, Middleware {
 
   address public EP = address(0); 
   // address public WFTM = 0x21be370D5312f44cB42ce377BC9b8a0cEF1A4C83;
-  address public WFTM = 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2;
+  address public WFTM = 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2;//mainnet WETH
   
   IUniswapV2Router02 public router;
   address public routerAddress; 
@@ -46,6 +46,9 @@ contract Void is Auth, Middleware {
 
   DividendDistributor distributor;
   address public distributorAddress;
+
+  Middleware middleware;
+  address public middlewareAddress;
 
   uint256 distributorGas = 500000;
 
@@ -227,13 +230,13 @@ contract Void is Auth, Middleware {
     // Max wallet check excluding pair and router
     if (!isSell && !isFree[recipient]){
         require((_balances[recipient] + amount) < _maxWallet, "Max wallet has been triggered");
-        setBuytimeToAmount(recipient, amount, uint64(getCurrentTime()));
+        middleware.setBuytimeToAmount(recipient, amount, uint64(getCurrentTime()));
     }
     
     uint256 amountReceived = 0;
     // No swapping on buy and tx
     if (isSell) {
-        uint256 sellFeeAmount = getSellFeeAmount(sender, amount, uint64(getCurrentTime()));
+        // uint256 sellFeeAmount = middleware.getSellFeeAmount(sender, amount, uint64(getCurrentTime()));
         console.log('thisaddress', address(this));
         if(shouldSwapBack()){ 
             console.log('swapBack');
@@ -242,13 +245,15 @@ contract Void is Auth, Middleware {
         if(shouldAutoBuyback()){ 
             triggerAutoBuyback(); 
         }
-        if(sellFeeAmount > 0) {
-            distributeSellFeeAmount(sellFeeAmount);
-        }
-        amountReceived = shouldTakeFee(sender) ? takeSellFee(sender, amount, sellFeeAmount) : amount;
-    } else {
-        amountReceived = shouldTakeFee(sender) ? takeFee(sender, amount) : amount;
+        // if(sellFeeAmount > 0) {
+        //     distributeSellFeeAmount(sellFeeAmount);
+        // }
+        // amountReceived = shouldTakeFee(sender) ? takeSellFee(sender, amount, sellFeeAmount) : amount;
     }
+    //  else {
+    //    amountReceived = shouldTakeFee(sender) ? takeFee(sender, amount) : amount;
+    // }
+    amountReceived = shouldTakeFee(sender) ? takeFee(sender, amount) : amount;
 
     _balances[sender] = _balances[sender].sub(amount, "Insufficient Balance");
     _balances[recipient] = _balances[recipient].add(amountReceived);
