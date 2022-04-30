@@ -48,7 +48,6 @@ describe("VoidTest", function() {
     });
   
     beforeEach(async function () {
-  
       const Middleware = await ethers.getContractFactory("Middleware");
       const Void = await ethers.getContractFactory("Void");
       
