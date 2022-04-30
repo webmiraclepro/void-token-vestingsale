@@ -25,6 +25,7 @@ export interface DividendDistributorInterface extends utils.Interface {
     "deposit()": FunctionFragment;
     "dividendsPerShare()": FunctionFragment;
     "dividendsPerShareAccuracyFactor()": FunctionFragment;
+    "getTotalRealised(address)": FunctionFragment;
     "getUnpaidEarnings(address)": FunctionFragment;
     "minDistribution()": FunctionFragment;
     "minPeriod()": FunctionFragment;
@@ -49,6 +50,10 @@ export interface DividendDistributorInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "dividendsPerShareAccuracyFactor",
     values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getTotalRealised",
+    values: [string]
   ): string;
   encodeFunctionData(
     functionFragment: "getUnpaidEarnings",
@@ -96,6 +101,10 @@ export interface DividendDistributorInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "dividendsPerShareAccuracyFactor",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getTotalRealised",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -172,6 +181,11 @@ export interface DividendDistributor extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
+    getTotalRealised(
+      _shareholder: string,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
     getUnpaidEarnings(
       _shareholder: string,
       overrides?: CallOverrides
@@ -230,6 +244,11 @@ export interface DividendDistributor extends BaseContract {
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
+  getTotalRealised(
+    _shareholder: string,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
   getUnpaidEarnings(
     _shareholder: string,
     overrides?: CallOverrides
@@ -281,6 +300,11 @@ export interface DividendDistributor extends BaseContract {
     dividendsPerShare(overrides?: CallOverrides): Promise<BigNumber>;
 
     dividendsPerShareAccuracyFactor(
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getTotalRealised(
+      _shareholder: string,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -342,6 +366,11 @@ export interface DividendDistributor extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    getTotalRealised(
+      _shareholder: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     getUnpaidEarnings(
       _shareholder: string,
       overrides?: CallOverrides
@@ -389,6 +418,11 @@ export interface DividendDistributor extends BaseContract {
     dividendsPerShare(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     dividendsPerShareAccuracyFactor(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getTotalRealised(
+      _shareholder: string,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 

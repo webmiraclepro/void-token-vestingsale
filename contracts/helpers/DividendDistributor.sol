@@ -15,8 +15,8 @@ contract DividendDistributor  {
     address token;
 
     // Tshare Token; 
-    IERC20 EP = IERC20(0x82f0B8B456c1A451378467398982d4834b6829c1); // MIM  
-
+    // IERC20 EP = IERC20(0x82f0B8B456c1A451378467398982d4834b6829c1); // dai for reward
+    IERC20 EP = IERC20(0x6B175474E89094C44Da98b954EedeAC495271d0F); //dai for reward on mainnet
     // WFTM;
     // address WFTM = 0x21be370D5312f44cB42ce377BC9b8a0cEF1A4C83;
     address WFTM = 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2;//mainnet WETH
@@ -151,8 +151,13 @@ contract DividendDistributor  {
             getUnpaidEarnings(_shareholder) > minDistribution;
     }
 
+    function getTotalRealised(address _shareholder) public view returns(uint256) {
+        return shares[_shareholder].totalRealised;
+    }
+
     function getUnpaidEarnings(address _shareholder) public view returns (uint256) {
         // Make shure address has shares; 
+
         if(shares[_shareholder].amount == 0){ 
             return 0; 
         }

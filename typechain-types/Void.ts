@@ -38,11 +38,8 @@ export interface VoidInterface extends utils.Interface {
     "decimals()": FunctionFragment;
     "developerFeeReceiver()": FunctionFragment;
     "distributorAddress()": FunctionFragment;
-    "getArrayLength(address)": FunctionFragment;
     "getCirculatingSupply()": FunctionFragment;
     "getLiquidityBacking(uint256)": FunctionFragment;
-    "getSellFeeAmount(address,uint256,uint64)": FunctionFragment;
-    "getTotalAmount(address)": FunctionFragment;
     "getTotalFee()": FunctionFragment;
     "isAuthorized(address)": FunctionFragment;
     "isFree(address)": FunctionFragment;
@@ -51,16 +48,15 @@ export interface VoidInterface extends utils.Interface {
     "launchedAt()": FunctionFragment;
     "launchedAtTimestamp()": FunctionFragment;
     "marketingFeeReceiver()": FunctionFragment;
+    "middlewareAddress()": FunctionFragment;
     "name()": FunctionFragment;
     "owner()": FunctionFragment;
     "pair()": FunctionFragment;
-    "refreshArray(address)": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
     "router()": FunctionFragment;
     "routerAddress()": FunctionFragment;
     "setAutoBuybackSettings(bool,uint256,uint256,uint256)": FunctionFragment;
     "setBuybackMultiplierSettings(uint256,uint256,uint256)": FunctionFragment;
-    "setBuytimeToAmount(address,uint256,uint64)": FunctionFragment;
     "setDistributionCriteria(uint256,uint256)": FunctionFragment;
     "setDistributorSettings(uint256)": FunctionFragment;
     "setFeeReceivers(address,address,address)": FunctionFragment;
@@ -83,7 +79,6 @@ export interface VoidInterface extends utils.Interface {
     "treasurerFeeReceiver()": FunctionFragment;
     "unSetFree(address)": FunctionFragment;
     "unauthorize(address)": FunctionFragment;
-    "vestingSaleSchedule(uint64,uint64)": FunctionFragment;
   };
 
   encodeFunctionData(functionFragment: "Collect", values?: undefined): string;
@@ -132,24 +127,12 @@ export interface VoidInterface extends utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "getArrayLength",
-    values: [string]
-  ): string;
-  encodeFunctionData(
     functionFragment: "getCirculatingSupply",
     values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "getLiquidityBacking",
     values: [BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "getSellFeeAmount",
-    values: [string, BigNumberish, BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "getTotalAmount",
-    values: [string]
   ): string;
   encodeFunctionData(
     functionFragment: "getTotalFee",
@@ -177,13 +160,13 @@ export interface VoidInterface extends utils.Interface {
     functionFragment: "marketingFeeReceiver",
     values?: undefined
   ): string;
+  encodeFunctionData(
+    functionFragment: "middlewareAddress",
+    values?: undefined
+  ): string;
   encodeFunctionData(functionFragment: "name", values?: undefined): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(functionFragment: "pair", values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: "refreshArray",
-    values: [string]
-  ): string;
   encodeFunctionData(
     functionFragment: "renounceOwnership",
     values?: undefined
@@ -200,10 +183,6 @@ export interface VoidInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "setBuybackMultiplierSettings",
     values: [BigNumberish, BigNumberish, BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "setBuytimeToAmount",
-    values: [string, BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "setDistributionCriteria",
@@ -287,10 +266,6 @@ export interface VoidInterface extends utils.Interface {
   ): string;
   encodeFunctionData(functionFragment: "unSetFree", values: [string]): string;
   encodeFunctionData(functionFragment: "unauthorize", values: [string]): string;
-  encodeFunctionData(
-    functionFragment: "vestingSaleSchedule",
-    values: [BigNumberish, BigNumberish]
-  ): string;
 
   decodeFunctionResult(functionFragment: "Collect", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "EP", data: BytesLike): Result;
@@ -329,23 +304,11 @@ export interface VoidInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "getArrayLength",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
     functionFragment: "getCirculatingSupply",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
     functionFragment: "getLiquidityBacking",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "getSellFeeAmount",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "getTotalAmount",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -371,13 +334,13 @@ export interface VoidInterface extends utils.Interface {
     functionFragment: "marketingFeeReceiver",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(
+    functionFragment: "middlewareAddress",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "pair", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "refreshArray",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(
     functionFragment: "renounceOwnership",
     data: BytesLike
@@ -393,10 +356,6 @@ export interface VoidInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "setBuybackMultiplierSettings",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "setBuytimeToAmount",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -467,10 +426,6 @@ export interface VoidInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: "unSetFree", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "unauthorize",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "vestingSaleSchedule",
     data: BytesLike
   ): Result;
 
@@ -608,27 +563,10 @@ export interface Void extends BaseContract {
 
     distributorAddress(overrides?: CallOverrides): Promise<[string]>;
 
-    getArrayLength(
-      _sender: string,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber]>;
-
     getCirculatingSupply(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     getLiquidityBacking(
       accuracy: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber]>;
-
-    getSellFeeAmount(
-      sender: string,
-      amount: BigNumberish,
-      sellTime: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
-    getTotalAmount(
-      account: string,
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
@@ -654,16 +592,13 @@ export interface Void extends BaseContract {
 
     marketingFeeReceiver(overrides?: CallOverrides): Promise<[string]>;
 
+    middlewareAddress(overrides?: CallOverrides): Promise<[string]>;
+
     name(overrides?: CallOverrides): Promise<[string]>;
 
     owner(overrides?: CallOverrides): Promise<[string]>;
 
     pair(overrides?: CallOverrides): Promise<[string]>;
-
-    refreshArray(
-      _sender: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
 
     renounceOwnership(
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -685,13 +620,6 @@ export interface Void extends BaseContract {
       numerator: BigNumberish,
       denominator: BigNumberish,
       length: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
-    setBuytimeToAmount(
-      receiver: string,
-      amount: BigNumberish,
-      buytime: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -804,12 +732,6 @@ export interface Void extends BaseContract {
       adr: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
-
-    vestingSaleSchedule(
-      sellTime: BigNumberish,
-      buyTime: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber] & { discountRate: BigNumber }>;
   };
 
   Collect(
@@ -866,27 +788,10 @@ export interface Void extends BaseContract {
 
   distributorAddress(overrides?: CallOverrides): Promise<string>;
 
-  getArrayLength(
-    _sender: string,
-    overrides?: CallOverrides
-  ): Promise<BigNumber>;
-
   getCirculatingSupply(overrides?: CallOverrides): Promise<BigNumber>;
 
   getLiquidityBacking(
     accuracy: BigNumberish,
-    overrides?: CallOverrides
-  ): Promise<BigNumber>;
-
-  getSellFeeAmount(
-    sender: string,
-    amount: BigNumberish,
-    sellTime: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
-  getTotalAmount(
-    account: string,
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
@@ -912,16 +817,13 @@ export interface Void extends BaseContract {
 
   marketingFeeReceiver(overrides?: CallOverrides): Promise<string>;
 
+  middlewareAddress(overrides?: CallOverrides): Promise<string>;
+
   name(overrides?: CallOverrides): Promise<string>;
 
   owner(overrides?: CallOverrides): Promise<string>;
 
   pair(overrides?: CallOverrides): Promise<string>;
-
-  refreshArray(
-    _sender: string,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
 
   renounceOwnership(
     overrides?: Overrides & { from?: string | Promise<string> }
@@ -943,13 +845,6 @@ export interface Void extends BaseContract {
     numerator: BigNumberish,
     denominator: BigNumberish,
     length: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
-  setBuytimeToAmount(
-    receiver: string,
-    amount: BigNumberish,
-    buytime: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -1063,12 +958,6 @@ export interface Void extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  vestingSaleSchedule(
-    sellTime: BigNumberish,
-    buyTime: BigNumberish,
-    overrides?: CallOverrides
-  ): Promise<BigNumber>;
-
   callStatic: {
     Collect(overrides?: CallOverrides): Promise<void>;
 
@@ -1114,27 +1003,10 @@ export interface Void extends BaseContract {
 
     distributorAddress(overrides?: CallOverrides): Promise<string>;
 
-    getArrayLength(
-      _sender: string,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
     getCirculatingSupply(overrides?: CallOverrides): Promise<BigNumber>;
 
     getLiquidityBacking(
       accuracy: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    getSellFeeAmount(
-      sender: string,
-      amount: BigNumberish,
-      sellTime: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    getTotalAmount(
-      account: string,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -1158,13 +1030,13 @@ export interface Void extends BaseContract {
 
     marketingFeeReceiver(overrides?: CallOverrides): Promise<string>;
 
+    middlewareAddress(overrides?: CallOverrides): Promise<string>;
+
     name(overrides?: CallOverrides): Promise<string>;
 
     owner(overrides?: CallOverrides): Promise<string>;
 
     pair(overrides?: CallOverrides): Promise<string>;
-
-    refreshArray(_sender: string, overrides?: CallOverrides): Promise<void>;
 
     renounceOwnership(overrides?: CallOverrides): Promise<void>;
 
@@ -1184,13 +1056,6 @@ export interface Void extends BaseContract {
       numerator: BigNumberish,
       denominator: BigNumberish,
       length: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    setBuytimeToAmount(
-      receiver: string,
-      amount: BigNumberish,
-      buytime: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -1291,12 +1156,6 @@ export interface Void extends BaseContract {
     unSetFree(holder: string, overrides?: CallOverrides): Promise<void>;
 
     unauthorize(adr: string, overrides?: CallOverrides): Promise<void>;
-
-    vestingSaleSchedule(
-      sellTime: BigNumberish,
-      buyTime: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
   };
 
   filters: {
@@ -1403,27 +1262,10 @@ export interface Void extends BaseContract {
 
     distributorAddress(overrides?: CallOverrides): Promise<BigNumber>;
 
-    getArrayLength(
-      _sender: string,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
     getCirculatingSupply(overrides?: CallOverrides): Promise<BigNumber>;
 
     getLiquidityBacking(
       accuracy: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    getSellFeeAmount(
-      sender: string,
-      amount: BigNumberish,
-      sellTime: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    getTotalAmount(
-      account: string,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -1449,16 +1291,13 @@ export interface Void extends BaseContract {
 
     marketingFeeReceiver(overrides?: CallOverrides): Promise<BigNumber>;
 
+    middlewareAddress(overrides?: CallOverrides): Promise<BigNumber>;
+
     name(overrides?: CallOverrides): Promise<BigNumber>;
 
     owner(overrides?: CallOverrides): Promise<BigNumber>;
 
     pair(overrides?: CallOverrides): Promise<BigNumber>;
-
-    refreshArray(
-      _sender: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
 
     renounceOwnership(
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -1480,13 +1319,6 @@ export interface Void extends BaseContract {
       numerator: BigNumberish,
       denominator: BigNumberish,
       length: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    setBuytimeToAmount(
-      receiver: string,
-      amount: BigNumberish,
-      buytime: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -1599,12 +1431,6 @@ export interface Void extends BaseContract {
       adr: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
-
-    vestingSaleSchedule(
-      sellTime: BigNumberish,
-      buyTime: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
   };
 
   populateTransaction: {
@@ -1676,29 +1502,12 @@ export interface Void extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    getArrayLength(
-      _sender: string,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
     getCirculatingSupply(
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     getLiquidityBacking(
       accuracy: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    getSellFeeAmount(
-      sender: string,
-      amount: BigNumberish,
-      sellTime: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    getTotalAmount(
-      account: string,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -1734,16 +1543,13 @@ export interface Void extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    middlewareAddress(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     name(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     pair(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    refreshArray(
-      _sender: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
 
     renounceOwnership(
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -1765,13 +1571,6 @@ export interface Void extends BaseContract {
       numerator: BigNumberish,
       denominator: BigNumberish,
       length: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    setBuytimeToAmount(
-      receiver: string,
-      amount: BigNumberish,
-      buytime: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -1885,12 +1684,6 @@ export interface Void extends BaseContract {
     unauthorize(
       adr: string,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    vestingSaleSchedule(
-      sellTime: BigNumberish,
-      buyTime: BigNumberish,
-      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
   };
 }

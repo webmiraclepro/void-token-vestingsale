@@ -217,29 +217,24 @@ contract Void is Auth {
 
   function _transferFrom(address sender, address recipient, uint256 amount) internal returns (bool) {
     // If in swap just do a basic transfer. Same as normal ERC20 transferFrom function;
-    console.log("inSwap", inSwap);
     if(inSwap) { 
         return _basicTransfer(sender, recipient, amount); 
     }
       
     bool isSell = recipient == pair || recipient == routerAddress;
-    console.log("isSell", isSell);
     
     checkTxLimit(sender, amount);
     
     // Max wallet check excluding pair and router
     if (!isSell && !isFree[recipient]){
         require((_balances[recipient] + amount) < _maxWallet, "Max wallet has been triggered");
-        middleware.setBuytimeToAmount(recipient, amount, uint64(getCurrentTime()));
     }
     
     uint256 amountReceived = 0;
     // No swapping on buy and tx
     if (isSell) {
         // uint256 sellFeeAmount = middleware.getSellFeeAmount(sender, amount, uint64(getCurrentTime()));
-        console.log('thisaddress', address(this));
         if(shouldSwapBack()){ 
-            console.log('swapBack');
             swapBack(); 
         }
         if(shouldAutoBuyback()){ 
@@ -365,8 +360,7 @@ contract Void is Auth {
     address[] memory path = new address[](2);
       path[0] = address(this);
       path[1] = WFTM;
-    console.log('swapBackPath', path[1]);
-    router.swapExactTokensForETHSupportingFeeOnTransferTokens(
+      router.swapExactTokensForETHSupportingFeeOnTransferTokens(
         amountToSwap,
         0,
         path,

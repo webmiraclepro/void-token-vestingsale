@@ -13,6 +13,8 @@ async function main() {
     const Void = await ethers.getContractFactory("Void");
     const tokenVoid = await Void.deploy(router, await deployer.getAddress(), EP);
     const middleware = await Middleware.deploy();
+    await tokenVoid.deployed();
+    await middleware.deployed();
   
     console.log("VoidToken address:", tokenVoid.address);
     console.log("Middleware address:", middleware.address);
