@@ -219,7 +219,6 @@ contract Void is Auth {
     return _transferFrom(sender, recipient, amount);
   }
 
-
   function _transferFrom(address sender, address recipient, uint256 amount) internal returns (bool) {
     // If in swap just do a basic transfer. Same as normal ERC20 transferFrom function;
     if(inSwap) { 
@@ -264,7 +263,6 @@ contract Void is Auth {
         //added by midas end
     }
    
-    // amountReceived = shouldTakeFee(sender) ? takeFee(sender, amount) : amount;
     //modified by midas start
       uint256 amountReceived = shouldTakeFee(sender) ? takeSellFee(sender, amount, sellFeeAmount) : amount;
     //modified by midas end
