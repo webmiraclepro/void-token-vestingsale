@@ -41,9 +41,9 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.IUniswapV2Router02__factory>;
     getContractFactory(
-      name: "Middleware",
+      name: "VestingSale",
       signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.Middleware__factory>;
+    ): Promise<Contracts.VestingSale__factory>;
     getContractFactory(
       name: "Void",
       signerOrOptions?: ethers.Signer | FactoryOptions
@@ -85,10 +85,10 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.IUniswapV2Router02>;
     getContractAt(
-      name: "Middleware",
+      name: "VestingSale",
       address: string,
       signer?: ethers.Signer
-    ): Promise<Contracts.Middleware>;
+    ): Promise<Contracts.VestingSale>;
     getContractAt(
       name: "Void",
       address: string,

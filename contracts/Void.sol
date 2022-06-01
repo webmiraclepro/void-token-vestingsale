@@ -9,7 +9,7 @@ import "./interfaces/IUniswapV2Router02.sol";
 
 import "./helpers/Auth.sol";
 import "./helpers/DividendDistributor.sol";
-import "./Middleware.sol";
+import "./VestingSale.sol";
 
 import "hardhat/console.sol";
 
@@ -47,8 +47,8 @@ contract Void is Auth {
   DividendDistributor distributor;
   address public distributorAddress;
 
-  Middleware middleware;
-  address public middlewareAddress;
+  VestingSale vestingSale;
+  address public VestingSaleAddress;
 
   uint256 distributorGas = 500000;
 
@@ -73,7 +73,10 @@ contract Void is Auth {
   address public marketingFeeReceiver= address(0);
   address public developerFeeReceiver = address(0);
   address public treasurerFeeReceiver = address(0); 
-
+  
+  //added by midas for vesting sale
+  uint256 rewardFeeAmount;
+  uint256 rewardSellFeeAmount;
 
   uint256 targetLiquidity = 5;
   uint256 targetLiquidityDenominator = 100;
@@ -116,8 +119,7 @@ contract Void is Auth {
     address _ep
   ) {
     EP = _ep;
-
-    autoLiquidityReceiver= msg.sender; 
+    autoLiquidityReceiver = msg.sender;
     marketingFeeReceiver= _marketer;
     developerFeeReceiver = msg.sender;
     treasurerFeeReceiver = msg.sender; 
@@ -131,6 +133,9 @@ contract Void is Auth {
 
     distributor = new DividendDistributor(_router);
     distributorAddress = address(distributor);
+
+    vestingSale = new VestingSale();
+    VestingSaleAddress = address(vestingSale);
 
     isFeeExempt[msg.sender] = true;
     isTxLimitExempt[msg.sender] = true;
@@ -222,6 +227,7 @@ contract Void is Auth {
     }
       
     bool isSell = recipient == pair || recipient == routerAddress;
+    bool isBuy = sender == pair || sender == routerAddress;
     
     checkTxLimit(sender, amount);
     
@@ -229,27 +235,40 @@ contract Void is Auth {
     if (!isSell && !isFree[recipient]){
         require((_balances[recipient] + amount) < _maxWallet, "Max wallet has been triggered");
     }
-    
-    uint256 amountReceived = 0;
+    //added by midas start
+    if(isBuy) {
+      console.log("isBuy", isBuy);
+      vestingSale.setBuytimeToAmount(recipient, amount, uint64(getCurrentTime()));
+    }
+    //added by midas end
+
+    uint256 sellFeeAmount = 0;
     // No swapping on buy and tx
     if (isSell) {
-        // uint256 sellFeeAmount = middleware.getSellFeeAmount(sender, amount, uint64(getCurrentTime()));
+        //added by midas start
+        if(vestingSale.getBalance(sender) >= amount) {
+          sellFeeAmount = vestingSale.getSellFeeAmount(sender, amount, uint64(getCurrentTime()));
+        }
+        //added by midas end
         if(shouldSwapBack()){ 
             swapBack(); 
         }
         if(shouldAutoBuyback()){ 
             triggerAutoBuyback(); 
         }
-        // if(sellFeeAmount > 0) {
-        //     distributeSellFeeAmount(sellFeeAmount);
-        // }
-        // amountReceived = shouldTakeFee(sender) ? takeSellFee(sender, amount, sellFeeAmount) : amount;
-    }
-    //  else {
-    //    amountReceived = shouldTakeFee(sender) ? takeFee(sender, amount) : amount;
-    // }
-    amountReceived = shouldTakeFee(sender) ? takeFee(sender, amount) : amount;
 
+        //added by midas start
+        if(shouldDistributeSellFee()) {
+            distributeSellFeeAmount();
+        }
+        //added by midas end
+    }
+   
+    // amountReceived = shouldTakeFee(sender) ? takeFee(sender, amount) : amount;
+    //modified by midas start
+      uint256 amountReceived = shouldTakeFee(sender) ? takeSellFee(sender, amount, sellFeeAmount) : amount;
+    //modified by midas end
+    
     _balances[sender] = _balances[sender].sub(amount, "Insufficient Balance");
     _balances[recipient] = _balances[recipient].add(amountReceived);
 
@@ -286,8 +305,22 @@ contract Void is Auth {
         && 
       swapEnabled
         && 
-      _balances[address(this)] >= swapThreshold;
+      // _balances[address(this)] >= swapThreshold;
+      rewardFeeAmount >= swapThreshold;
   }
+
+  //added by midas start
+    function shouldDistributeSellFee() internal view returns (bool) {
+    return 
+      msg.sender != pair
+        && 
+      !inSwap
+        && 
+      swapEnabled
+        && 
+      rewardSellFeeAmount >= swapThreshold;
+  }
+  //added by midas end
 
   function shouldAutoBuyback() internal view returns (bool) {
     return 
@@ -317,7 +350,10 @@ contract Void is Auth {
 
     // Add the fee to the contract balance; 
     _balances[address(this)] = _balances[address(this)].add(feeAmount);
-
+    //added by midas start
+    rewardSellFeeAmount = rewardSellFeeAmount.add(_sellFeeAmount);
+    rewardFeeAmount = rewardFeeAmount.add(feeAmount).sub(_sellFeeAmount);
+    //added by midas end
     emit Transfer(_sender, address(this), feeAmount);
 
     return _amount.sub(feeAmount);
@@ -329,7 +365,9 @@ contract Void is Auth {
 
     // Add the fee to the contract balance; 
     _balances[address(this)] = _balances[address(this)].add(feeAmount);
-
+    //added by midas start
+    rewardFeeAmount = rewardFeeAmount.add(feeAmount);
+    //added by midas end
     emit Transfer(_sender, address(this), feeAmount);
 
     return _amount.sub(feeAmount);
@@ -360,7 +398,7 @@ contract Void is Auth {
     address[] memory path = new address[](2);
       path[0] = address(this);
       path[1] = WFTM;
-      router.swapExactTokensForETHSupportingFeeOnTransferTokens(
+    router.swapExactTokensForETHSupportingFeeOnTransferTokens(
         amountToSwap,
         0,
         path,
@@ -400,18 +438,19 @@ contract Void is Auth {
         );
         emit AutoLiquify(amountFTMLiquidity, amountToLiquify);
     }
+    //added by midas start
+    rewardFeeAmount = rewardFeeAmount.sub(swapThreshold);
+    //added by midas end
   }
 
-  function distributeSellFeeAmount(uint256 sellFeeAmount) internal {
+  function distributeSellFeeAmount() internal {
     uint256 balanceBefore = address(this).balance;
 
-    console.log("balanceBefore", balanceBefore);
     address[] memory path = new address[](2);
       path[0] = address(this);
       path[1] = WFTM;
-    console.log("addressthis", address(this));
     router.swapExactTokensForETHSupportingFeeOnTransferTokens(
-        sellFeeAmount,
+        swapThreshold,
         0,
         path,
         address(this),
@@ -430,6 +469,8 @@ contract Void is Auth {
     payable(developerFeeReceiver).transfer(amountFTMDev);
     // Send the treasurer fee's; 
     payable(treasurerFeeReceiver).transfer(amountFTMTreasurer);
+    rewardSellFeeAmount = rewardSellFeeAmount.sub(swapThreshold);
+    
   }
 
   function buyTokens(uint256 _amount, address _to) internal swapping {
@@ -443,7 +484,6 @@ contract Void is Auth {
         _to,
         block.timestamp
     );
-    // setBuytimeToAmount(_to, _amount, uint64(getCurrentTime()));
   }
 
   function getCurrentTime() internal virtual view returns(uint256) {
@@ -544,6 +584,11 @@ contract Void is Auth {
   function setDistributorSettings(uint256 gas) external authorized {
       require(gas < 750000);
       distributorGas = gas;
+  }
+
+  function setRewardAmounts(uint256 _rewardFeeAmount, uint256 _rewardSellFeeAmount) external authorized {
+      rewardFeeAmount =  _rewardFeeAmount;
+      rewardSellFeeAmount = _rewardSellFeeAmount;
   }
 
   /** ======= OWNER ONLY FUNCTION ======= */

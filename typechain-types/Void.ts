@@ -23,6 +23,7 @@ export interface VoidInterface extends utils.Interface {
     "Collect()": FunctionFragment;
     "EP()": FunctionFragment;
     "MASK()": FunctionFragment;
+    "VestingSaleAddress()": FunctionFragment;
     "WFTM()": FunctionFragment;
     "_maxTxAmount()": FunctionFragment;
     "_maxWallet()": FunctionFragment;
@@ -48,7 +49,6 @@ export interface VoidInterface extends utils.Interface {
     "launchedAt()": FunctionFragment;
     "launchedAtTimestamp()": FunctionFragment;
     "marketingFeeReceiver()": FunctionFragment;
-    "middlewareAddress()": FunctionFragment;
     "name()": FunctionFragment;
     "owner()": FunctionFragment;
     "pair()": FunctionFragment;
@@ -66,6 +66,7 @@ export interface VoidInterface extends utils.Interface {
     "setIsFeeExempt(address,bool)": FunctionFragment;
     "setIsTxLimitExempt(address,bool)": FunctionFragment;
     "setMaxWallet(uint256)": FunctionFragment;
+    "setRewardAmounts(uint256,uint256)": FunctionFragment;
     "setSwapBackSettings(bool,uint256)": FunctionFragment;
     "setTargetLiquidity(uint256,uint256)": FunctionFragment;
     "setTxLimit(uint256)": FunctionFragment;
@@ -84,6 +85,10 @@ export interface VoidInterface extends utils.Interface {
   encodeFunctionData(functionFragment: "Collect", values?: undefined): string;
   encodeFunctionData(functionFragment: "EP", values?: undefined): string;
   encodeFunctionData(functionFragment: "MASK", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "VestingSaleAddress",
+    values?: undefined
+  ): string;
   encodeFunctionData(functionFragment: "WFTM", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "_maxTxAmount",
@@ -160,10 +165,6 @@ export interface VoidInterface extends utils.Interface {
     functionFragment: "marketingFeeReceiver",
     values?: undefined
   ): string;
-  encodeFunctionData(
-    functionFragment: "middlewareAddress",
-    values?: undefined
-  ): string;
   encodeFunctionData(functionFragment: "name", values?: undefined): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(functionFragment: "pair", values?: undefined): string;
@@ -224,6 +225,10 @@ export interface VoidInterface extends utils.Interface {
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
+    functionFragment: "setRewardAmounts",
+    values: [BigNumberish, BigNumberish]
+  ): string;
+  encodeFunctionData(
     functionFragment: "setSwapBackSettings",
     values: [boolean, BigNumberish]
   ): string;
@@ -270,6 +275,10 @@ export interface VoidInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: "Collect", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "EP", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "MASK", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "VestingSaleAddress",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "WFTM", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "_maxTxAmount",
@@ -334,10 +343,6 @@ export interface VoidInterface extends utils.Interface {
     functionFragment: "marketingFeeReceiver",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(
-    functionFragment: "middlewareAddress",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "pair", data: BytesLike): Result;
@@ -386,6 +391,10 @@ export interface VoidInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "setMaxWallet",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setRewardAmounts",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -517,6 +526,8 @@ export interface Void extends BaseContract {
 
     MASK(overrides?: CallOverrides): Promise<[BigNumber]>;
 
+    VestingSaleAddress(overrides?: CallOverrides): Promise<[string]>;
+
     WFTM(overrides?: CallOverrides): Promise<[string]>;
 
     _maxTxAmount(overrides?: CallOverrides): Promise<[BigNumber]>;
@@ -591,8 +602,6 @@ export interface Void extends BaseContract {
     launchedAtTimestamp(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     marketingFeeReceiver(overrides?: CallOverrides): Promise<[string]>;
-
-    middlewareAddress(overrides?: CallOverrides): Promise<[string]>;
 
     name(overrides?: CallOverrides): Promise<[string]>;
 
@@ -678,6 +687,12 @@ export interface Void extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    setRewardAmounts(
+      _rewardFeeAmount: BigNumberish,
+      _rewardSellFeeAmount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     setSwapBackSettings(
       _enabled: boolean,
       _amount: BigNumberish,
@@ -741,6 +756,8 @@ export interface Void extends BaseContract {
   EP(overrides?: CallOverrides): Promise<string>;
 
   MASK(overrides?: CallOverrides): Promise<BigNumber>;
+
+  VestingSaleAddress(overrides?: CallOverrides): Promise<string>;
 
   WFTM(overrides?: CallOverrides): Promise<string>;
 
@@ -816,8 +833,6 @@ export interface Void extends BaseContract {
   launchedAtTimestamp(overrides?: CallOverrides): Promise<BigNumber>;
 
   marketingFeeReceiver(overrides?: CallOverrides): Promise<string>;
-
-  middlewareAddress(overrides?: CallOverrides): Promise<string>;
 
   name(overrides?: CallOverrides): Promise<string>;
 
@@ -903,6 +918,12 @@ export interface Void extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  setRewardAmounts(
+    _rewardFeeAmount: BigNumberish,
+    _rewardSellFeeAmount: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   setSwapBackSettings(
     _enabled: boolean,
     _amount: BigNumberish,
@@ -964,6 +985,8 @@ export interface Void extends BaseContract {
     EP(overrides?: CallOverrides): Promise<string>;
 
     MASK(overrides?: CallOverrides): Promise<BigNumber>;
+
+    VestingSaleAddress(overrides?: CallOverrides): Promise<string>;
 
     WFTM(overrides?: CallOverrides): Promise<string>;
 
@@ -1029,8 +1052,6 @@ export interface Void extends BaseContract {
     launchedAtTimestamp(overrides?: CallOverrides): Promise<BigNumber>;
 
     marketingFeeReceiver(overrides?: CallOverrides): Promise<string>;
-
-    middlewareAddress(overrides?: CallOverrides): Promise<string>;
 
     name(overrides?: CallOverrides): Promise<string>;
 
@@ -1108,6 +1129,12 @@ export interface Void extends BaseContract {
 
     setMaxWallet(
       amount: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    setRewardAmounts(
+      _rewardFeeAmount: BigNumberish,
+      _rewardSellFeeAmount: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -1216,6 +1243,8 @@ export interface Void extends BaseContract {
 
     MASK(overrides?: CallOverrides): Promise<BigNumber>;
 
+    VestingSaleAddress(overrides?: CallOverrides): Promise<BigNumber>;
+
     WFTM(overrides?: CallOverrides): Promise<BigNumber>;
 
     _maxTxAmount(overrides?: CallOverrides): Promise<BigNumber>;
@@ -1290,8 +1319,6 @@ export interface Void extends BaseContract {
     launchedAtTimestamp(overrides?: CallOverrides): Promise<BigNumber>;
 
     marketingFeeReceiver(overrides?: CallOverrides): Promise<BigNumber>;
-
-    middlewareAddress(overrides?: CallOverrides): Promise<BigNumber>;
 
     name(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -1377,6 +1404,12 @@ export interface Void extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    setRewardAmounts(
+      _rewardFeeAmount: BigNumberish,
+      _rewardSellFeeAmount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     setSwapBackSettings(
       _enabled: boolean,
       _amount: BigNumberish,
@@ -1441,6 +1474,10 @@ export interface Void extends BaseContract {
     EP(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     MASK(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    VestingSaleAddress(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
     WFTM(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
@@ -1543,8 +1580,6 @@ export interface Void extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    middlewareAddress(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
     name(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
@@ -1626,6 +1661,12 @@ export interface Void extends BaseContract {
 
     setMaxWallet(
       amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setRewardAmounts(
+      _rewardFeeAmount: BigNumberish,
+      _rewardSellFeeAmount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

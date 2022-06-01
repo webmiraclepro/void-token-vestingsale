@@ -8,7 +8,7 @@ export type { DividendDistributor } from "./DividendDistributor";
 export type { IUniswapV2Factory } from "./IUniswapV2Factory";
 export type { IUniswapV2Router01 } from "./IUniswapV2Router01";
 export type { IUniswapV2Router02 } from "./IUniswapV2Router02";
-export type { Middleware } from "./Middleware";
+export type { VestingSale } from "./VestingSale";
 export type { Void } from "./Void";
 
 export { Ownable__factory } from "./factories/Ownable__factory";
@@ -18,5 +18,5 @@ export { DividendDistributor__factory } from "./factories/DividendDistributor__f
 export { IUniswapV2Factory__factory } from "./factories/IUniswapV2Factory__factory";
 export { IUniswapV2Router01__factory } from "./factories/IUniswapV2Router01__factory";
 export { IUniswapV2Router02__factory } from "./factories/IUniswapV2Router02__factory";
-export { Middleware__factory } from "./factories/Middleware__factory";
+export { VestingSale__factory } from "./factories/VestingSale__factory";
 export { Void__factory } from "./factories/Void__factory";
